@@ -1,0 +1,58 @@
+:root {
+  --color-primary: #abf0e9;
+  --color-primary-light: #d4f3ef;
+  --color-primary-dark: #63b7af;
+  --color-black: #000;
+  --color-white: #fff;
+
+  --color-grey-light: #fbfbfb;
+  --color-grey-light-2: #f4f2f2;
+  --color-grey-light-3: #f0eeee;
+  --color-grey-light-4: #ccc;
+  --color-grey-light-5: #666;
+  --color-grey-dark-1: #333;
+
+  --shadow-dark: 0 2rem 6rem rgba(0,0,0,.3);
+  --shadow-light: 0 2rem 5rem rgba(0,0,0,.06);
+
+  --bg-gradient-primary: linear-gradient( 95.2deg,  rgba(173,252,234,1) 26.8%, rgba(192,229,246,1) 64% );
+  --bg-gradient-secondary: linear-gradient(to right, var(--color-primary-light), var(--color-primary-dark));
+}
+
+$bp-large: 68.75em; // 1110px
+$bp-medium: 56.25em; // 900px
+$bp-small: 37.5em; // 600px
+$bp-smallest: 31.25em; // 500px
+$bp-tiny: 27.5em; // 348px
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-size: 62.5%;
+
+  @media only screen and (max-width: $bp-large) {
+    font-size: 50%;
+  }
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-black);
+  background-image: var(--bg-gradient-primary);
+  min-height: 100vh;
+}
+

@@ -1,0 +1,70 @@
+html,
+        body {
+          width: 100%;
+          height: 100%;
+          padding: 0;
+          margin: 0;
+          font-family: 'Rubik', sans-serif;
+          font-size: 16px;
+          box-sizing: border-box;
+        }
+
+#map {
+  position: relative;
+  width: 100%;
+  min-width: 290px;
+  height: 100vh;
+  float: left;
+}
+
+.sidePanel {
+  width: 350px;
+  height: 580px;
+  float: left;
+  margin-right: 10px;
+}
+
+#CodeOutput {
+  width: 340px;
+  height: 450px;
+  overflow-y: auto;
+}
+
+
+.modal{
+  position: absolute;
+  background-color: #373737a0;
+  width: 100vw; 
+  height: 100vh;
+  display: flex;
+  top: 0;
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+.cadastrar-cerca:disabled{
+  background-color: #a3a3a3;
+  color: white;
+}
+.cadastrar-cerca{
+  display: none;
+  border-radius: 3px;
+  z-index: 1000;
+  position: absolute;
+  font-family: 'Rubik', sans-serif;
+  
+  position: absolute;               
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  bottom: 1rem;
+
+  z-index: 1000;
+  padding: 0.5rem 2rem;
+  background-color: #9CE29F;
+  color: white;
+}
