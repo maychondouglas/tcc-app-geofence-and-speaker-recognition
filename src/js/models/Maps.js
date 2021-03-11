@@ -20,6 +20,10 @@ export default class Maps {
     }
 
     this.map = new atlas.Map(idElementMap, this.mapsConfigs);
+
+    this.drawingEvents = ['drawingchanged', 'drawingchanging', 'drawingcomplete', 'drawingmodechanged', 'drawingstarted'];
+
+    
   }
 
 
@@ -41,8 +45,46 @@ export default class Maps {
       let drawingManager = new atlasDraw.drawing.DrawingManager(this.map, {
           toolbar: new atlasDraw.control.DrawingToolbar({ position: 'non-fixed', style: 'dark', buttons: ['draw-circle', 'draw-rectangle']  })
       });
+
+      /*                ADICIONANDO EVENTOS DO MAPA             */
+      /*                ADICIONANDO EVENTOS DO MAPA             */
+      /*                ADICIONANDO EVENTOS DO MAPA             */
+      /*                ADICIONANDO EVENTOS DO MAPA             */
+
+
+      this.map.events.add(this.drawingEvents[2], drawingManager, ()=>{
+        console.log(this.drawingEvents[2]);
+      });
+
+      this.map.events.add(this.drawingEvents[4], drawingManager, ()=>{
+        console.log(this.drawingEvents[4]);
+        this.drawingComplete();
+      });
+
+
+
+
+      
     });
   }
 
+  getDrawnShapes() {
+    var source = drawingManager.getSource();
+    
+    console.log( JSON.stringify(source.toJson(), null, '    ') );
+  }
+
+  drawingStarted(){
+    //
+  }
+
+  drawingComplete(){
+
+    document.querySelector('#fence-subscribe').disabled = false;
+    document.querySelector('#change-fence').disabled = false;
+    //habilitar cadastro da cerca
+    //habilitar apagar desenho
+    //bloquear buttosn de formas
+  }
 };
 

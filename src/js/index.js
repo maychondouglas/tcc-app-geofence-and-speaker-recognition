@@ -106,8 +106,8 @@ window.addEventListener('load', ()  =>  {
     }})
   });
 
-  buttonController({id: 'subscribe-fence', value: 'cadastrar cerca', parent: 'main', classList: 'btn btn-primary', disabled: true});
-
+  buttonController({id: 'fence-subscribe', value: 'cadastrar cerca', parent: '.buttons-controll-fence', classList: 'btn btn-primary', disabled: true});
+  buttonController({id: 'change-fence', value: 'refazer cerca', parent: '.buttons-controll-fence', classList: 'btn btn-secondary', disabled: true});
 })
 
 
