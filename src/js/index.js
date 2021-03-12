@@ -25,15 +25,14 @@ const state = {};
 
 const modalController = modalProperties => {
   try{
-    state.modal = new Modal(modalProperties);
 
-    ModalView.rederTheModal(state.modal);
+    state.modals = {};
 
-    document.getElementById(modalProperties.modalId).querySelector('button').addEventListener('click', ()=>{
-      document.getElementById(modalProperties.modalId).classList.add('hidden');
-    })
+    let modal_id = JSON.stringify(modalProperties.modalId);
 
-    //hiddenModal();
+    state.modals[modal_id] = new Modal(modalProperties);
+
+    ModalView.rederTheModal(state.modals[modal_id]);
     
   }catch(error){
     console.log(error)
@@ -78,18 +77,48 @@ const buttonController = button => {
 /*                      INICIALIZAÇÃO DAS PROPRIEDADES DO MAPA                     */
 
 window.addEventListener('load', ()  =>  {
+  /*                      PRIMEIRO MODAL                     */
+  /*                      PRIMEIRO MODAL                     */
+  /*                      PRIMEIRO MODAL                     */
+  /*                      PRIMEIRO MODAL                     */
+  /*                      PRIMEIRO MODAL                     */
   modalController({
     modalId: 'modalInit',
     iconPath: '../images/icons/location.svg',
     mensage: 'Agora é hora de você criar a sua cerca Virtual!',
-    buttonValue: 'OK'    
+    hasCloseButton: false,
+  });
+
+  buttonController({id: 'ok-initButton', value: 'OK', parent: '.modal-alert', classList: 'btn btn-accept-alert', disabled: false, position: 'beforeend'});
+  
+  
+  document.querySelector('#ok-initButton').addEventListener('click', () => {
+    document.querySelector('#modalInit').classList.add('hidden');
   });
   
+
+  /*                      DEFINIÇÕES DO MAPA                     */
+  /*                      DEFINIÇÕES DO MAPA                     */
+  /*                      DEFINIÇÕES DO MAPA                     */
+  /*                      DEFINIÇÕES DO MAPA                     */
+  /*                      DEFINIÇÕES DO MAPA                     */
+
   navigator.geolocation.getCurrentPosition(local => {
     mapsController({
       longitude: local.coords.longitude, 
       latitude: local.coords.latitude, 
       idElementMap: 'map',
+      markerOptions: {
+        htmlContent: '<div><div class="pin bounce"></div><div class="pulse"></div></div>',
+        color: 'DodgerBlue',
+        text: 'o',
+        position: [local.coords.longitude, local.coords.latitude]
+      },
+      popupMarkerOptions: {
+        
+        htmlContent: "",
+        pixelOffset: [0, -30]
+      },
       properties: {
         center: [local.coords.longitude, local.coords.latitude],
         zoom: 15,
@@ -106,9 +135,33 @@ window.addEventListener('load', ()  =>  {
     }})
   });
 
-  buttonController({id: 'fence-subscribe', value: 'cadastrar cerca', parent: '.buttons-controll-fence', classList: 'btn btn-primary', disabled: true});
-  buttonController({id: 'change-fence', value: 'refazer cerca', parent: '.buttons-controll-fence', classList: 'btn btn-secondary', disabled: true});
+  buttonController({id: 'fence-subscribe', value: 'cadastrar cerca', parent: '.buttons-controll-fence', classList: 'btn btn-primary', disabled: true, position: 'afterbegin'});
+
+
+
+  /*                      SEGUNDO MODAL - CONFIRMAÇÃO DE CADASTRO DE CERCA                     */
+  /*                      SEGUNDO MODAL - CONFIRMAÇÃO DE CADASTRO DE CERCA                     */
+  /*                      SEGUNDO MODAL - CONFIRMAÇÃO DE CADASTRO DE CERCA                     */
+  /*                      SEGUNDO MODAL - CONFIRMAÇÃO DE CADASTRO DE CERCA                     */
+  /*                      SEGUNDO MODAL - CONFIRMAÇÃO DE CADASTRO DE CERCA                     */
+  
+  modalController({
+    modalId: 'modalConfirmSubscribeFence',
+    iconPath: '../images/icons/select.svg',
+    mensage: 'teste',
+    hasCloseButton: true,
+    classList: 'hidden',
+  });
+
+  document.querySelector('#fence-subscribe').addEventListener('click', () => {
+    document.querySelector('#modalConfirmSubscribeFence').classList.remove('hidden');
+  });
+
+
+
+  buttonController({id: 'confirm-fence-subscribe', value: 'confirmar', parent: '#modalConfirmSubscribeFence>.modal-alert', classList: 'btn btn-primary', disabled: false, position: 'beforeend'});
 })
+
 
 
 
