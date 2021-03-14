@@ -5,16 +5,25 @@ export default class FenceRepository {
     this.database = database;
   }
 
-  create(usuario, fence){
+  async create(usuario, fence){
     
-    this.database.send(`usuarios/${usuario}/fence/`, {
+    return new Promise((resolve, reject) => {
+      let result = this.database.send(`usuarios/${usuario}/fence/`, {
 
-      type: (fence.type)?fence.type:"",
-      coordenadas: (fence.coordinates)?fence.ponto:"",
-      area: (fence.area)?fence.area:"",
-      perimetro: (fence.perimeter)?fence.perimeter:"",
-      radius: fence.radius?fence.radius:"" 
-    });
-    
+        type: (fence.type)?fence.type:"",
+        coordenadas: (fence.coordinates)?fence.coordinates:"",
+        area: (fence.area)?fence.area:"",
+        perimetro: (fence.perimeter)?fence.perimeter:"",
+        radius: fence.radius?fence.radius:"" 
+      });
+
+      console.log(result)
+
+      if(result){
+        resolve('ok');
+      }else{
+        reject('err');
+      }
+    }); 
   }
 }

@@ -1,12 +1,12 @@
 export default class Fence{
   constructor(fence){
-    if(this.geometricForm == 'circle'){
-      this.radius = fence.radius;
-      this.latitude = fence.latitude;
-      this.longitude = fence.longitude;
-    }else{
+    this.type = fence.type;
+    this.perimeter = fence.perimetro,
+    this.area = fence.area,
+    this.coordinates = fence.coordinates;
 
+    if(this.type == 'circle'){
+      this.radius = fence.radius;
     }
-    
   }
 }

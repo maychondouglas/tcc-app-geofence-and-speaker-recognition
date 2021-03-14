@@ -1,9 +1,9 @@
 @import '../../node_modules/azure-maps-control/dist/atlas.min.css';
 @import '../../node_modules/azure-maps-drawing-tools/dist/atlas-drawing.min.css';
 
+@import "animations";
 @import "base";
 @import "layout";
 @import "components";
 @import "header";
 @import "footer";
-@import "animations";

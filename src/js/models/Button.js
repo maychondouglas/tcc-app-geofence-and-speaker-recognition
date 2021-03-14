@@ -5,5 +5,6 @@ export default class Button {
     this.parent = button.parent;
     this.classList = button.classList;
     this.disabled = button.disabled;
+    this.position = button.position;
   }
 }

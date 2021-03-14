@@ -43,8 +43,13 @@ html,
   align-items: center;
 }
 
-
-
+.azure-maps-drawtoolbar-button:disabled{
+  background-color: #707070;
+  cursor: not-allowed;
+}
+.azure-maps-drawtoolbar-button:disabled:hover{
+  background-color: #707070;
+}
 
 .cadastrar-cerca:disabled{
   background-color: #a3a3a3;

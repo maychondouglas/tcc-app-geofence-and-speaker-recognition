@@ -5,6 +5,4 @@ export const renderTheMap = maps => {
     
     maps.buildToolbar();
 
-    maps.builderMarker();
-
 }
