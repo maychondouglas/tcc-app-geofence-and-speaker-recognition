@@ -81,34 +81,35 @@ export default class Maps {
     
     fence.coordinates = {};
     if (shape.isCircle()) {
-        fence = {};
-        
-        let result = JSON.parse(JSON.stringify(drawingManager.getSource().toJson()));
+      
+      fence = {};
+      
+      let result = JSON.parse(JSON.stringify(drawingManager.getSource().toJson()));
 
-        fence.coordinates = result.features[0]["geometry"]["coordinates"];
-        console.log(result);
-        
-        console.log(fence.coordinates);
-        fence.type = 'circulo';
-        fence.radius = atlas.math.convertDistance(shape.getProperties().radius, 'meters', 'kilometers', 2);
-        fence.area = Math.round(2 * Math.PI * fence.radius * fence.radius * 100) / 100;
-        fence.perimetro = Math.round(2 * Math.PI * fence.radius * 100) / 100;
+      fence.coordinates = result.features[0]["geometry"]["coordinates"];
+      console.log(result);
+      
+      console.log(fence.coordinates);
+      fence.type = 'circulo';
+      fence.radius = atlas.math.convertDistance(shape.getProperties().radius, 'meters', 'kilometers', 2);
+      fence.area = Math.round(2 * Math.PI * fence.radius * fence.radius * 100) / 100;
+      fence.perimetro = Math.round(2 * Math.PI * fence.radius * 100) / 100;
 
 
     } else {
 
-        /*Rectangle*/
-        fence = {};
-        fence.type = 'retangulo';
-        fence.geometry = shape.toJson().geometry;
-        //fence.coordinates = fence.geometry;
-        fence.coordinates = fence.geometry.coordinates[0];
+      /*Rectangle*/
+      fence = {};
+      fence.type = 'retangulo';
+      fence.geometry = shape.toJson().geometry;
+      //fence.coordinates = fence.geometry;
+      fence.coordinates = fence.geometry.coordinates[0];
 
-        console.log(fence.coordinates);
+      console.log(fence.coordinates);
 
-        fence.perimetro = Math.round(atlas.math.getLengthOfPath(fence.geometry.coordinates[0], 'kilometers') * 100) / 100;
+      fence.perimetro = Math.round(atlas.math.getLengthOfPath(fence.geometry.coordinates[0], 'kilometers') * 100) / 100;
 
-        fence.area = atlas.math.getArea(fence.geometry, 'squareKilometre', 2);
+      fence.area = atlas.math.getArea(fence.geometry, 'squareKilometre', 2);
     }
   }
 

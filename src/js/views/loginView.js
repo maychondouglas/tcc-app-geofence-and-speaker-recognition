@@ -5,7 +5,7 @@ export const renderLoading = login => {
     <main class='login__main'>
       <div class='login__main__container'>
         <div class='login-area'>
-          <div class='hidden'>
+          <div class=''>
             <h2>Login</h2>
             <form>
               <input type='text' placeholder='username' name='username' id='username' class='field field__username'>
@@ -14,7 +14,7 @@ export const renderLoading = login => {
             <span class='line-or'><p>or</p></span>
             <button class='btn btn-signup'>Sign Up</button>
           </div>
-          <div class='login-record'>
+          <div class='hidden' class='login-record'>
             <div class='login-record__verify'>
               <div class='login-record__verify__icon'>
                 <img src='../../images/icons/mic.svg'>

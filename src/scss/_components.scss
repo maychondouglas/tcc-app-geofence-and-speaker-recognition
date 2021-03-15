@@ -103,6 +103,7 @@
     border: var(--color-primary-dark) solid 2px;
     border-radius: 3px;
     margin: 1rem 0;
+    width: 100%;
     color: var(--color-primary-dark);
   }
 }
@@ -240,6 +241,8 @@
 /*Login*/
 
 .login{
+
+
   &__main{
     
     background: url('../images/global-map.svg') var(--color-primary-light);
@@ -254,6 +257,8 @@
       margin: 0 auto;
 
       .login-area {
+
+        
         
         background: rgb(238,219,227);
         background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(158, 158, 158, 0.7) 100%);
@@ -271,6 +276,7 @@
         form{
           display: flex;
           flex-direction: column;
+          
         }
         h2{
           margin-bottom: 0.2rem;
@@ -322,6 +328,7 @@
     }
   }
   &-record{
+
     height: 100%;
     display: flex;
     flex-direction: column;
