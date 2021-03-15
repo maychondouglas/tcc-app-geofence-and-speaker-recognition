@@ -3,6 +3,8 @@ import * as MapsView from './views/mapsView';
 
 import '../scss/main.scss';
 
+import Login from './models/Login';
+import * as LoginView from './views/loginView';
 
 import Modal from './models/Modal';
 import * as ModalView from './views/modalView';
@@ -22,6 +24,20 @@ import Loading from './models/Loading';
 
 
 const state = {};
+
+const loginController = loginProperties => {
+  try{
+
+    state.login = new Login(loginProperties);
+
+    LoginView.renderLoading(state.login);
+
+  }catch(err){
+    console.log(err);
+  }
+}
+
+
 
 /*                      CONTROLADORA DO MODAL                     */
 /*                      CONTROLADORA DO MODAL                     */
@@ -92,13 +108,26 @@ const loadingController = loading => {
   
 }
 
+
 /*                      INICIALIZAÇÃO DAS PROPRIEDADES DO MAPA                     */
 /*                      INICIALIZAÇÃO DAS PROPRIEDADES DO MAPA                     */
 /*                      INICIALIZAÇÃO DAS PROPRIEDADES DO MAPA                     */
 /*                      INICIALIZAÇÃO DAS PROPRIEDADES DO MAPA                     */
 /*                      INICIALIZAÇÃO DAS PROPRIEDADES DO MAPA                     */
 
-window.addEventListener('load', ()  =>  {
+
+const inicializarApp = () => {
+  loginController({fields: "algunsFields"});
+}
+
+window.onload = inicializarApp();
+
+const inicializarMapa = ()  =>  {
+
+
+
+
+
   /*                      PRIMEIRO MODAL                     */
   /*                      PRIMEIRO MODAL                     */
   /*                      PRIMEIRO MODAL                     */
@@ -199,7 +228,7 @@ window.addEventListener('load', ()  =>  {
     position: 'beforeend'
   });
 
-});
+};
 
 /* Verificar Situações de click para não adicionar evento onde o elemento ainda não foi criado */
 elements.body.addEventListener('click', e => {
