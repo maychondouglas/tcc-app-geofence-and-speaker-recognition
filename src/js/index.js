@@ -20,6 +20,9 @@ import Fence from './models/Fence';
 import DataBase from './models/Repository/DataBase';
 import FenceRepository from './models/Repository/FenceRepository';
 import Loading from './models/Loading';
+import SpeakerRepository from './models/Repository/SpeakerRepository';
+import User from './models/User';
+import Speaker from './models/Speaker';
 
 
 
@@ -117,23 +120,16 @@ const loadingController = loading => {
 
 
 const inicializarApp = () => {
+
+  inicializarDB();
+
+
   loginController({fields: "algunsFields"});
 }
 
-window.onload = inicializarApp();
+window.onload = inicializarApp;
 
-const inicializarMapa = ()  =>  {
-
-
-
-
-
-  /*                      PRIMEIRO MODAL                     */
-  /*                      PRIMEIRO MODAL                     */
-  /*                      PRIMEIRO MODAL                     */
-  /*                      PRIMEIRO MODAL                     */
-  /*                      PRIMEIRO MODAL                     */
-
+const inicializarDB = () => {
   dbController({
     apiKey: "AIzaSyD7BorZwXPshl0hoF_vU9TMwp2fh3v2DbM",
     authDomain: "tcc-2-1e9c6.firebaseapp.com",
@@ -142,6 +138,18 @@ const inicializarMapa = ()  =>  {
     messagingSenderId: "394765204468",
     appId: "1:394765204468:web:5f6e77d6f878166bdc17a1"
   });
+}
+
+const inicializarMap = () => {
+
+
+  /*                      PRIMEIRO MODAL                     */
+  /*                      PRIMEIRO MODAL                     */
+  /*                      PRIMEIRO MODAL                     */
+  /*                      PRIMEIRO MODAL                     */
+  /*                      PRIMEIRO MODAL                     */
+
+  inicializarDB();
 
   modalController({
     modalId: 'modalInit',
@@ -279,6 +287,62 @@ elements.body.addEventListener('click', e => {
       <br>Perímetro: <strong>${state.maps.fence.perimetro} km</strong>`
     })
     ModalView.showModal('modalConfirmSubscribeFence');
+  }else if(e.target.matches('#btn_login, #btn_login *')){
+
+    e.preventDefault();
+
+    initValidation();
+
+  }else if(e.target.matches('.login-record__verify__icon, .login-record__verify__icon *')){
+
+    startRecord();
+
   }
 
 });
+
+const initValidation = () => {
+
+  const speakerRepository = new SpeakerRepository(state.database);
+
+  let username = document.querySelector('#username-login').value;
+  console.log(username);
+  
+  let speakerId = speakerRepository.read({username: username});
+
+  speakerId.then(deuCerto => {
+    console.log(deuCerto.id);
+    if(deuCerto){
+      initSpeakerRecognition(deuCerto.id)
+    }else{
+      alert('Usuário não Encontrado');
+    }
+  }, deuErrado => {
+    console.log(deuErrado);
+  });
+
+}
+const initSpeakerRecognition = (speakerId) => {
+  LoginView.renderAudioRecord();
+  state.speaker = {};
+  state.speaker.id = speakerId;
+}
+
+
+const startRecord = () => {
+  console.log('Gravação iniciada');
+  const speaker = new Speaker();
+
+  let resultado = speaker.startListeningForIdentification(state.speaker.id);
+
+  LoginView.renderAudioRecording();
+
+  resultado.then(res => {
+    if(res){
+      console.log('Dentro!');
+      console.log(speaker.resultadoDaVerificação);
+    }
+  }).catch(err => {
+    console.log(err);
+  });
+}

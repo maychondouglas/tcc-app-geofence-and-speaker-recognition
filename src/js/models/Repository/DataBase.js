@@ -14,4 +14,18 @@ export default class DataBase {
       }
     });
   }
+
+  async recev(where, who){
+
+    return await this.database.ref(where).child(who).get().then( result =>  {
+      if (result.exists()) {
+        return result.val();
+      }
+      else {
+        console.log("No data available");
+      }
+    }).catch(err => {
+      console.error(err);
+    });
+  }
 }
