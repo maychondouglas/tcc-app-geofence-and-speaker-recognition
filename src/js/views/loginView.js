@@ -48,18 +48,28 @@ export const renderAudioRecording = () => {
 
   const record__verify__icon = document.querySelector('.login-record__verify__icon');
 
-  record_msg.innerHTML = `Fale alguma frase legal ou desabafe por 20 segundos`;
+  record_msg.innerHTML = `Fale alguma frase legal ou desabafe por 10 segundos`;
   record__verify__icon.querySelector('img').setAttribute('src', '../../images/icons/waves.svg');
   record__verify__icon.classList.add('record-init');
 }
 
-export const renderAudioRecordCompleted = () => {
+export const renderAudioRecordCompleted = (firstName, accessResult) => {
 
-  const record_msg = document.querySelector('.record-msg');
-  const record__verify__icon = document.querySelector('.login-record__verify__icon');
+  if(accessResult){
+    const record_msg = document.querySelector('.record-msg');
+    const record__verify__icon = document.querySelector('.login-record__verify__icon');
+  
+    record_msg.innerHTML = `Pronto! Você é o ${firstName} mesmo ;)`;
+    record__verify__icon.querySelector('img').setAttribute('src', '../../images/icons/check.svg');
+    record__verify__icon.classList.add('record-authorized');
+  }else{
+    const record_msg = document.querySelector('.record-msg');
+    const record__verify__icon = document.querySelector('.login-record__verify__icon');
+  
+    record_msg.innerHTML = `Não conseguimos validar. É você mesmo? Tente novamente... ;)`;
+    record__verify__icon.querySelector('img').setAttribute('src', '../../images/icons/close.svg');
+    record__verify__icon.classList.add('record-denied');
+  }
 
-  record_msg.innerHTML = `Pronto! Você é o Maychon Mesmo ;)`;
-  record__verify__icon.querySelector('img').setAttribute('src', '../../images/icons/check.svg');
-  record__verify__icon.classList.add('record-init');
 }
 

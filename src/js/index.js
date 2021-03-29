@@ -127,7 +127,7 @@ const inicializarApp = () => {
   loginController({fields: "algunsFields"});
 }
 
-window.onload = inicializarApp;
+//window.onload = inicializarMap;
 
 const inicializarDB = () => {
   dbController({
@@ -140,7 +140,9 @@ const inicializarDB = () => {
   });
 }
 
-const inicializarMap = () => {
+window.onload = inicializarApp;
+
+const iniciarMapa = () => {
 
 
   /*                      PRIMEIRO MODAL                     */
@@ -329,20 +331,83 @@ const initSpeakerRecognition = (speakerId) => {
 }
 
 
+
+/*Gravação do Áudio para Mandar o Blob para ser verificado*/
+
+function onRecorderSuccess(stream, callback, secondsOfAudio) {
+  let audio_context = audio_context || new window.AudioContext;
+  var input = audio_context.createMediaStreamSource(stream);
+  state.recorder = new Recorder(input);
+  state.recorder.record();
+  
+  setTimeout(() => { 
+    StopListening(callback); 
+  }, secondsOfAudio*1000);
+}
+
+function onRecorderError(e) {
+  console.error('media error', e);
+}
+
+function StopListening(callback){
+  console.log('...working...');
+    state.recorder && state.recorder.stop();
+    state.recorder.exportWAV(blob => {
+        callback(blob);
+    });
+    state.recorder.clear();
+}
+
+const setarAudioBlob = blob => {
+  state.audioBlob = blob;
+}
+//////////////////////////
+
+
+const callIdentifier = async (speaker) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      speaker.startListeningForIdentification(state.speaker.id, state.audioBlob).then(res => {
+        if(res){
+          
+          resolve(res);
+        }
+      }).catch(err => {
+        reject(err);
+      })
+    }, 12000);
+  })
+
+  //let resultado = speaker.startListeningForIdentification(state.speaker.id, state.audioBlob);
+  
+
+}
+
 const startRecord = () => {
   console.log('Gravação iniciada');
   const speaker = new Speaker();
 
-  let resultado = speaker.startListeningForIdentification(state.speaker.id);
+  navigator.getUserMedia({ 
+    audio: true
+  }, stream => { 
+    onRecorderSuccess(stream, setarAudioBlob, 10)
+  }, onRecorderError);
 
-  LoginView.renderAudioRecording();
+  let result = callIdentifier(speaker);
 
-  resultado.then(res => {
-    if(res){
-      console.log('Dentro!');
-      console.log(speaker.resultadoDaVerificação);
+  result.then(res => {
+    let jsonResult = JSON.parse(res);
+    console.log(jsonResult);
+    if(jsonResult.identifiedProfile.score > 0.5){
+      LoginView.renderAudioRecordCompleted('Maychon',true);
+    }else{
+      LoginView.renderAudioRecordCompleted('Maychon',false);
     }
   }).catch(err => {
     console.log(err);
-  });
+  })
+
+  LoginView.renderAudioRecording();
+
 }
+

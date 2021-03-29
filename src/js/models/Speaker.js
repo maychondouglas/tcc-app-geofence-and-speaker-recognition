@@ -6,16 +6,19 @@ let  recorder;
 let audio_context;
 let id = "";
 
-function onMediaSuccess(stream, callback, secondsOfAudio) {
+/*
+function onRecorderSuccess(stream, callback, secondsOfAudio) {
   audio_context = audio_context || new window.AudioContext;
   var input = audio_context.createMediaStreamSource(stream);
   recorder = new Recorder(input);
   recorder.record();
   
-setTimeout(() => { StopListening(callback); }, secondsOfAudio*1000);
+  setTimeout(() => { 
+    StopListening(callback); 
+  }, secondsOfAudio*1000);
 }
 
-function onMediaError(e) {
+function onRecorderError(e) {
   console.error('media error', e);
 }
 
@@ -26,11 +29,12 @@ function StopListening(callback){
         callback(blob);
     });
     recorder.clear();
-}
+}*/
 
 const key = "8e962cfc24a445dbbed5cd6b9f922df1";
 const baseApi = "https://westus2.api.cognitive.microsoft.com/";
 var profileIds = [];
+
 
 (function () {
 	// Cross browser sound recording using the web audio API
@@ -153,42 +157,41 @@ export default class Speaker {
     }, 1000);
   }
 
-  // 2. Start the browser listening, listen for 10 seconds, pass the audio stream to "identifyProfile"
-  async startListeningForIdentification(idUser){
+  checkAudio(blob) {
 
-    id = idUser;
-    console.log('Estou ouvindo...fale alguma por 10 segundos...');
-    
-    navigator.getUserMedia({ audio: true}, stream => { onMediaSuccess(stream, this.verificar, 10)}, onMediaError);
+    return new Promise((resolve, reject) => {
 
-  }
+      let request = new XMLHttpRequest();
+      request.open("POST", identifyProfileEndpoint(id), true);
+      request.setRequestHeader('Ocp-Apim-Subscription-Key', key);
+      request.onload = function () {
 
-  //VOU EXECUTAR QUANDO JÁ TIVER O ÁUDIO PRONTO E GRAVADO!
-  verificar(blob) {
+        if(request.status >= 200 &&  request.status <300){
 
-    let request = new XMLHttpRequest();
-    request.open("POST", identifyProfileEndpoint(id), true);
-    request.setRequestHeader('Ocp-Apim-Subscription-Key', key);
-    request.onload = function () {
+          this.resultadoDaVerificação = JSON.parse(request.responseText).identifiedProfile;
 
-      if(request.status){
+          resolve(request.responseText);
 
-        console.log('Identificando Perfil');
-
-        console.log(JSON.parse(request.responseText).identifiedProfile);
-        this.resultadoDaVerificação = JSON.parse(request.responseText).identifiedProfile;
-
-      }else{
-        console.log('Erro na requisição');
-      }
+        }else{
+          reject(request.statusText);
+        }
+        
+      };
       
-    };
-    
-    request.send(blob);
+      request.send(blob);
+
+    });
   
   }
 
 
+  startListeningForIdentification(idUser, blob){
+
+    id = idUser;
+    console.log('Estou ouvindo...fale alguma coisa por 10 segundos...');
+    
+    return this.checkAudio(blob);
+  }
 
 
 
