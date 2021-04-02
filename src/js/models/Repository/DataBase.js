@@ -23,6 +23,7 @@ export default class DataBase {
       }
       else {
         console.log("No data available");
+        return false;
       }
     }).catch(err => {
       console.error(err);

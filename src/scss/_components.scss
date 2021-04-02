@@ -73,6 +73,7 @@
     color: var(--color-primary-dark);
     background: #fff;
   
+  
     &:disabled{
       border: solid 2px var(--color-grey-light-4);
       color: var(--color-primary-dark);
@@ -90,7 +91,7 @@
     }
   }
 
-  &-signin{
+  &-main{
     background: #333;
     border: none;
     border-radius: 3px;
@@ -98,7 +99,7 @@
     color: var(--color-white);
   }
 
-  &-signup{
+  &-tertiary{
     background: transparent;
     border: var(--color-primary-dark) solid 2px;
     border-radius: 3px;
@@ -265,6 +266,17 @@
       gap: 20px;
       margin: 0 auto;
 
+      @media screen and (max-width: 900px) {
+        grid-template-columns: 1fr 1fr;
+        padding: 2rem;
+      }
+
+      @media screen and (max-width: 600px) {
+        grid-template-columns: 1fr;
+        padding: 2rem;
+        
+      }
+
       .login-area {
 
         
@@ -281,6 +293,14 @@
         border-radius: 5px;
         min-height: 50vh;
         min-width: 100%;
+
+        @media screen and (max-width: 900px) {
+          grid-column: 2 / span 1;
+        }
+
+        @media screen and (max-width: 600px) {
+          grid-column: 1 / span 1;
+        }
 
         form{
           display: flex;
@@ -404,6 +424,7 @@
   padding: 0.6rem 0.5rem;
   font-size: 1.025rem;
   font-family: 'Futura', sans-serif;
+  margin-bottom: 0.2rem;
 
   &:focus{
     outline: none;

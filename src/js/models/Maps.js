@@ -90,8 +90,10 @@ export default class Maps {
       console.log(result);
       
       console.log(fence.coordinates);
-      fence.type = 'circulo';
-      fence.radius = atlas.math.convertDistance(shape.getProperties().radius, 'meters', 'kilometers', 2);
+      fence.type = 'circle';
+      
+      ///fence.radius = atlas.math.convertDistance(shape.getProperties().radius, 'meters', 'kilometers', 2);
+      fence.radius = atlas.math.convertDistance(shape.getProperties().radius, 'meters', 'kilometers', 5);
       fence.area = Math.round(2 * Math.PI * fence.radius * fence.radius * 100) / 100;
       fence.perimetro = Math.round(2 * Math.PI * fence.radius * 100) / 100;
 
@@ -111,6 +113,27 @@ export default class Maps {
 
       fence.area = atlas.math.getArea(fence.geometry, 'squareKilometre', 2);
     }
+  }
+
+  showFenceVerification(fence) {
+    this.map.events.add('ready', () => {
+      let dataSource = new atlas.source.DataSource();
+      this.map.sources.add(dataSource);
+
+      console.log(fence.radius);
+
+      dataSource.add(new atlas.data.Feature(new atlas.data.Point(
+        [fence.coordinates[0], fence.coordinates[1]]), {
+          subType: fence.type,
+          radius: fence.radius*1000
+        })
+      );
+
+      this.map.layers.add(new atlas.layer.PolygonLayer(dataSource, null, {
+        fillColor: 'rgba(0, 200, 200, 0.8)'
+      }));
+
+    });
   }
 
 };

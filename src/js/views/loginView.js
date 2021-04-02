@@ -9,11 +9,24 @@ export const renderLoading = login => {
             <h2>Login</h2>
             <form>
               <input type='text' placeholder='username' name='username' required id='username-login' class='field field__username'>
-              <input  id='btn_login'  class='btn btn-signin' type='submit' value='Sign In'>
+              <input  id='btn_login'  class='btn btn-main' type='submit' value='Sign In'>
             </form>
             <span class='line-or'><p>or</p></span>
-            <button class='btn btn-signup'>Sign Up</button>
+            <button id='go-to-sign-up' class='btn btn-tertiary'>Sign Up</button>
           </div>
+          
+          <div class='sign-up-area hidden'>
+            <h2>Sign Up</h2>
+            <form>
+              <input type='text' placeholder='username' name='username' required id='username-signup' class='field field__username'>
+              <input type='text' placeholder='first name' name='firstname' required id='firstname-signup' class='field field__firstname'>
+              <input type='text' placeholder='last name' name='lastname' required id='lastname-signup' class='field field__lastname'>
+              <input  id='btn_subscribe'  class='btn btn-main' type='submit' value='Subscribe'>
+            </form>
+            <span class='line-or'><p>or</p></span>
+            <button class='btn btn-tertiary'>Sign In</button>
+          </div>
+          
           <div class='login-record hidden'>
             <div class='login-record__verify'>
               <div class='login-record__verify__icon'>
@@ -71,5 +84,20 @@ export const renderAudioRecordCompleted = (firstName, accessResult) => {
     record__verify__icon.classList.add('record-denied');
   }
 
+}
+
+export const renderSignUpData = () => {
+  const login_area = document.querySelector('.login-area>div');
+  const sign_up_area = document.querySelector('.sign-up-area');
+  login_area.classList.add('hidden');
+  sign_up_area.classList.remove('hidden');
+}
+
+export const getDataNewUser = () => {
+  return {
+    username: document.getElementById('username-signup').value,
+    firstName: document.getElementById('firstname-signup').value,
+    lastName: document.getElementById('lastname-signup').value
+  };
 }
 

@@ -23,10 +23,14 @@ import Loading from './models/Loading';
 import SpeakerRepository from './models/Repository/SpeakerRepository';
 import User from './models/User';
 import Speaker from './models/Speaker';
+import UserRepository from './models/Repository/UserRepository';
 
 
 
 const state = {};
+
+state.loadings = {};
+state.modals = {};
 
 const loginController = loginProperties => {
   try{
@@ -40,18 +44,8 @@ const loginController = loginProperties => {
   }
 }
 
-
-
-/*                      CONTROLADORA DO MODAL                     */
-/*                      CONTROLADORA DO MODAL                     */
-/*                      CONTROLADORA DO MODAL                     */
-/*                      CONTROLADORA DO MODAL                     */
-/*                      CONTROLADORA DO MODAL                     */
-
 const modalController = modalProperties => {
   try{
-
-    state.modals = {};
 
     let modal_id = JSON.stringify(modalProperties.modalId);
 
@@ -63,12 +57,6 @@ const modalController = modalProperties => {
     console.log(error)
   }
 }
-
-/*                      CONTROLADORA DO MAPA                     */
-/*                      CONTROLADORA DO MAPA                     */
-/*                      CONTROLADORA DO MAPA                     */
-/*                      CONTROLADORA DO MAPA                     */
-/*                      CONTROLADORA DO MAPA                     */
 
 const mapsController = mapsProperties => {
   try{
@@ -97,38 +85,6 @@ const dbController = configs => {
   state.database = new DataBase(configs);
 }
 
-const fenceController = fence => {
-  state.fence = new Fence(fence);
-}
-
-const loadingController = loading => {
-  
-  state.loadings = {};
-
-  state.loadings[loading.loadingId] = new Loading(loading);
-
-  LoadingView.renderLoading(state.loadings[loading.loadingId]);
-  
-}
-
-
-/*                      INICIALIZAÇÃO DAS PROPRIEDADES DO MAPA                     */
-/*                      INICIALIZAÇÃO DAS PROPRIEDADES DO MAPA                     */
-/*                      INICIALIZAÇÃO DAS PROPRIEDADES DO MAPA                     */
-/*                      INICIALIZAÇÃO DAS PROPRIEDADES DO MAPA                     */
-/*                      INICIALIZAÇÃO DAS PROPRIEDADES DO MAPA                     */
-
-
-const inicializarApp = () => {
-
-  inicializarDB();
-
-
-  loginController({fields: "algunsFields"});
-}
-
-//window.onload = inicializarMap;
-
 const inicializarDB = () => {
   dbController({
     apiKey: "AIzaSyD7BorZwXPshl0hoF_vU9TMwp2fh3v2DbM",
@@ -140,7 +96,112 @@ const inicializarDB = () => {
   });
 }
 
-window.onload = inicializarApp;
+const fenceController = fence => {
+  state.fence = new Fence(fence);
+}
+
+const loadingController = loading => {
+  
+  state.loadings[loading.loadingId] = new Loading(loading);
+
+  LoadingView.renderLoading(state.loadings[loading.loadingId]);
+  
+}
+
+const fenceVerificationController = mapsProperties => {
+
+  try{
+    
+    loadingController({ loadingId: 'awaitingFenceVerification' });
+
+    LoadingView.showLoading('awaitingFenceVerification');
+
+    if(!state.database){
+      inicializarDB();
+    }
+
+    const fenceRepository = new FenceRepository(state.database);
+
+    if(! state.maps){
+
+      if(!document.querySelector('#map')){
+        elements.body.innerHTML = `<div id='map'></div>`;
+      }
+      
+      state.maps = new Maps(mapsProperties);
+    }
+    
+    let request =  fenceRepository.read({username: 'maychondouglas'});
+    
+    request.then(cercaCadastrada => {
+
+      console.log(cercaCadastrada);
+
+      MapsView.renderTheMapVerification(state.maps, cercaCadastrada);
+      
+      LoadingView.hideLoading('awaitingFenceVerification');
+
+    }).catch(err => {
+      console.log(err);
+    })
+
+    
+
+
+  }catch(error){
+    console.log(error);
+  }  
+
+}
+
+const inicializarApp = () => {
+
+  inicializarDB();
+
+
+  loginController({fields: "algunsFields"});
+}
+
+//window.onload = inicializarMap;
+
+
+/*
+const fenceVerificationControllerTester = () => {
+
+  navigator.geolocation.getCurrentPosition(local => {
+    fenceVerificationController({
+      longitude: local.coords.longitude, 
+      latitude: local.coords.latitude, 
+      idElementMap: 'map',
+      markerOptions: {
+        htmlContent: '<div><div class="pin bounce"></div><div class="pulse"></div></div>',
+        color: 'DodgerBlue',
+        text: 'o',
+        position: [local.coords.longitude, local.coords.latitude]
+      },
+      popupMarkerOptions: {
+        
+        htmlContent: "",
+        pixelOffset: [0, -30]
+      },
+      properties: {
+        center: [local.coords.longitude, local.coords.latitude],
+        zoom: 15,
+        view: "Auto",
+        authOptions: {
+          authType: 'subscriptionKey',
+          subscriptionKey: 'JEs_jF8YIe3SEQDDCY_9o4TAcclusprjHC8b0VBtvOw',
+          clientId: 'e9fb7e5f-71e4-400c-8e56-5f6d07d50184',
+          getToken: function (resolve, reject, map) {
+              var tokenServiceUrl = "https://azuremapscodesamples.azurewebsites.net/Common/TokenService.ashx";
+              fetch(tokenServiceUrl).then(r => r.text()).then(token => resolve(token));
+          }
+        }
+    }})
+  });
+}*/
+
+
 
 const iniciarMapa = () => {
 
@@ -299,9 +360,48 @@ elements.body.addEventListener('click', e => {
 
     startRecord();
 
+  }else if(e.target.matches('#btn_subscribe, #btn_subscribe *')){
+
+
+    e.preventDefault();
+
+    //obter os dados do formulário de cadastro
+    const userData = LoginView.getDataNewUser();
+    console.log(userData);
+
+    //verificar se este usuário já existe
+    if(! state.database){
+      inicializarDB();
+    }
+    const userRepository = new UserRepository(state.database);
+
+    userRepository.read(userData).then(res => {
+
+      console.log(res);
+      if(!res){
+        userRepository.create(userData).then(res => {
+          console.log(res);
+        })
+      }else{
+        alert('Este usuário já existe. Clique em Sign In e faça Login');
+      }
+      
+
+    }).catch(err => {
+      console.log(err);
+    })
+    
+    
+
+  }else if(e.target.matches('#go-to-sign-up, #go-to-sign-up *')){
+    LoginView.renderSignUpData();
   }
 
 });
+
+const initSubscribeAudio = () => {
+  
+}
 
 const initValidation = () => {
 
@@ -330,7 +430,7 @@ const initSpeakerRecognition = (speakerId) => {
   state.speaker.id = speakerId;
 }
 
-
+window.onload = inicializarApp;
 
 /*Gravação do Áudio para Mandar o Blob para ser verificado*/
 
@@ -361,8 +461,6 @@ function StopListening(callback){
 const setarAudioBlob = blob => {
   state.audioBlob = blob;
 }
-//////////////////////////
-
 
 const callIdentifier = async (speaker) => {
   return new Promise((resolve, reject) => {
@@ -400,6 +498,43 @@ const startRecord = () => {
     console.log(jsonResult);
     if(jsonResult.identifiedProfile.score > 0.5){
       LoginView.renderAudioRecordCompleted('Maychon',true);
+
+
+      /*Passando as informações para rendereizar o Mapa da 
+      Localização Atual e verificar se está dentro da Cerca*/
+
+      navigator.geolocation.watchPosition(local => {
+        fenceVerificationController({
+          longitude: local.coords.longitude, 
+          latitude: local.coords.latitude, 
+          idElementMap: 'map',
+          markerOptions: {
+            htmlContent: '<div><div class="pin bounce"></div><div class="pulse"></div></div>',
+            color: 'DodgerBlue',
+            text: 'o',
+            position: [local.coords.longitude, local.coords.latitude]
+          },
+          popupMarkerOptions: {
+            
+            htmlContent: "",
+            pixelOffset: [0, -30]
+          },
+          properties: {
+            center: [local.coords.longitude, local.coords.latitude],
+            zoom: 15,
+            view: "Auto",
+            authOptions: {
+              authType: 'subscriptionKey',
+              subscriptionKey: 'JEs_jF8YIe3SEQDDCY_9o4TAcclusprjHC8b0VBtvOw',
+              clientId: 'e9fb7e5f-71e4-400c-8e56-5f6d07d50184',
+              getToken: function (resolve, reject, map) {
+                  var tokenServiceUrl = "https://azuremapscodesamples.azurewebsites.net/Common/TokenService.ashx";
+                  fetch(tokenServiceUrl).then(r => r.text()).then(token => resolve(token));
+              }
+            }
+        }})
+      });
+
     }else{
       LoginView.renderAudioRecordCompleted('Maychon',false);
     }

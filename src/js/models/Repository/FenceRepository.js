@@ -1,3 +1,4 @@
+import Fence from "../Fence";
 
 export default class FenceRepository {
 
@@ -26,4 +27,31 @@ export default class FenceRepository {
       }
     }); 
   }
+  async read(user){
+    return new Promise((resolve, reject) => {
+
+      let result = this.database.recev(`usuarios/${user.username}`, 'fence');
+
+      if(result){
+
+        result.then(res => {
+          let myFence = new Fence({
+            type: res.type, 
+            perimeter: res.perimetro, 
+            area: res.area, 
+            coordinates: res.coordenadas,
+            radius: res.radius
+          });
+
+          resolve(myFence);
+        })
+        
+
+      }else{
+        reject('err');
+      }
+
+    });
+  }
+
 }
