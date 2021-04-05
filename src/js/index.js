@@ -31,6 +31,7 @@ const state = {};
 
 state.loadings = {};
 state.modals = {};
+state.speaker = {};
 
 const loginController = loginProperties => {
   try{
@@ -161,45 +162,6 @@ const inicializarApp = () => {
 
   loginController({fields: "algunsFields"});
 }
-
-//window.onload = inicializarMap;
-
-
-/*
-const fenceVerificationControllerTester = () => {
-
-  navigator.geolocation.getCurrentPosition(local => {
-    fenceVerificationController({
-      longitude: local.coords.longitude, 
-      latitude: local.coords.latitude, 
-      idElementMap: 'map',
-      markerOptions: {
-        htmlContent: '<div><div class="pin bounce"></div><div class="pulse"></div></div>',
-        color: 'DodgerBlue',
-        text: 'o',
-        position: [local.coords.longitude, local.coords.latitude]
-      },
-      popupMarkerOptions: {
-        
-        htmlContent: "",
-        pixelOffset: [0, -30]
-      },
-      properties: {
-        center: [local.coords.longitude, local.coords.latitude],
-        zoom: 15,
-        view: "Auto",
-        authOptions: {
-          authType: 'subscriptionKey',
-          subscriptionKey: 'JEs_jF8YIe3SEQDDCY_9o4TAcclusprjHC8b0VBtvOw',
-          clientId: 'e9fb7e5f-71e4-400c-8e56-5f6d07d50184',
-          getToken: function (resolve, reject, map) {
-              var tokenServiceUrl = "https://azuremapscodesamples.azurewebsites.net/Common/TokenService.ashx";
-              fetch(tokenServiceUrl).then(r => r.text()).then(token => resolve(token));
-          }
-        }
-    }})
-  });
-}*/
 
 
 
@@ -358,12 +320,15 @@ elements.body.addEventListener('click', e => {
 
   }else if(e.target.matches('.login-record__verify__icon, .login-record__verify__icon *')){
 
-    startRecord();
+    startRecordToRecognition();
 
   }else if(e.target.matches('#btn_subscribe, #btn_subscribe *')){
 
 
     e.preventDefault();
+
+    loadingController({ loadingId: 'initialLoading' });
+    
 
     //obter os dados do formulário de cadastro
     const userData = LoginView.getDataNewUser();
@@ -379,10 +344,13 @@ elements.body.addEventListener('click', e => {
 
       console.log(res);
       if(!res){
+        
         userRepository.create(userData).then(res => {
-          console.log(res);
+          LoadingView.hideLoading('initialLoading');
+          LoginView.renderAudioRecordToSubscribe();
         })
       }else{
+        LoadingView.hideLoading('initialLoading');
         alert('Este usuário já existe. Clique em Sign In e faça Login');
       }
       
@@ -394,14 +362,14 @@ elements.body.addEventListener('click', e => {
     
 
   }else if(e.target.matches('#go-to-sign-up, #go-to-sign-up *')){
+
     LoginView.renderSignUpData();
+
+  }else if(e.target.matches('.login-record__subscribe__icon, .login-record__subscribe__icon *')){
+    startRecordToSubscribe();
   }
 
 });
-
-const initSubscribeAudio = () => {
-  
-}
 
 const initValidation = () => {
 
@@ -412,90 +380,99 @@ const initValidation = () => {
   
   let speakerId = speakerRepository.read({username: username});
 
-  speakerId.then(deuCerto => {
-    console.log(deuCerto.id);
-    if(deuCerto){
-      initSpeakerRecognition(deuCerto.id)
+  speakerId.then(encontrado => {
+    console.log(encontrado.id);
+    if(encontrado){
+      initSpeakerRecognition(encontrado.id)
     }else{
       alert('Usuário não Encontrado');
     }
-  }, deuErrado => {
-    console.log(deuErrado);
+  }, naoEncontrado => {
+    console.log(naoEncontrado);
   });
 
 }
+
 const initSpeakerRecognition = (speakerId) => {
+
+  /*Aqui será disponibilizado o botão para o usuário 
+  clicar e iniciar a gravação para o Reconhecimento do Locutor*/
+
   LoginView.renderAudioRecord();
-  state.speaker = {};
   state.speaker.id = speakerId;
 }
 
 window.onload = inicializarApp;
 
-/*Gravação do Áudio para Mandar o Blob para ser verificado*/
 
-function onRecorderSuccess(stream, callback, secondsOfAudio) {
-  let audio_context = audio_context || new window.AudioContext;
-  var input = audio_context.createMediaStreamSource(stream);
-  state.recorder = new Recorder(input);
-  state.recorder.record();
-  
-  setTimeout(() => { 
-    StopListening(callback); 
-  }, secondsOfAudio*1000);
-}
 
-function onRecorderError(e) {
-  console.error('media error', e);
-}
 
-function StopListening(callback){
-  console.log('...working...');
-    state.recorder && state.recorder.stop();
-    state.recorder.exportWAV(blob => {
-        callback(blob);
-    });
-    state.recorder.clear();
-}
 
-const setarAudioBlob = blob => {
-  state.audioBlob = blob;
-}
 
-const callIdentifier = async (speaker) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      speaker.startListeningForIdentification(state.speaker.id, state.audioBlob).then(res => {
-        if(res){
-          
-          resolve(res);
-        }
-      }).catch(err => {
-        reject(err);
-      })
-    }, 12000);
-  })
 
-  //let resultado = speaker.startListeningForIdentification(state.speaker.id, state.audioBlob);
-  
-
-}
-
-const startRecord = () => {
-  console.log('Gravação iniciada');
-  const speaker = new Speaker();
-
+/*Criando o Áudio( blob ) e guardar no state */ 
+const createBlob = (seconds) => {
   navigator.getUserMedia({ 
     audio: true
   }, stream => { 
-    onRecorderSuccess(stream, setarAudioBlob, 10)
+    onRecorderSuccess(stream, setarAudioBlob, seconds)
   }, onRecorderError);
+}
+
+
+/*Criando o Áudio( blob ) para um novo Usuário*/
+const startRecordToSubscribe = () => {
+  console.log('Gravação para Cadastro de Novo Locutor Iniciada...');
+
+  const speaker = new Speaker();
+
+  createBlob(15);
+
+  setTimeout(() => {
+    const resultado = speaker.createProfile(state.audioBlob);
+
+    resultado.then(res1 => {
+      //irá devolver o ID do novo Locutor, esse ID será enviado para o cadastro do usuário no Firebase
+      //console.log(res);
+
+      speaker.enrollProfileAudio(state.audioBlob, res1).then(res2 => {
+        console.log(res2);
+
+      }).catch(err => {
+
+        console.log(err);
+
+      })
+    }).catch(err => {
+      console.log(err);
+    })
+  }, 15000)
+
+}
+
+
+
+
+
+
+
+
+/*Parte de Gravação de Áudio - Reconhecimento de Usuário Cadastrado*/
+
+const startRecordToRecognition = () => {
+  console.log('Gravação para Reconhecimento do Locutor (já cadastrado) Iniciada...');
+
+
+  const speaker = new Speaker();
+
+  createBlob(10);
 
   let result = callIdentifier(speaker);
 
   result.then(res => {
     let jsonResult = JSON.parse(res);
     console.log(jsonResult);
+
     if(jsonResult.identifiedProfile.score > 0.5){
       LoginView.renderAudioRecordCompleted('Maychon',true);
 
@@ -546,3 +523,44 @@ const startRecord = () => {
 
 }
 
+const callIdentifier = async (speaker) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      speaker.startListeningForIdentification(state.speaker.id, state.audioBlob).then(res => {
+        if(res){
+          resolve(res);
+        }
+      }).catch(err => {
+        reject(err);
+      })
+    }, 12000);
+  })
+}
+
+const setarAudioBlob = blob => {
+  state.audioBlob = blob;
+}
+
+function StopListening(callback){
+  console.log('...working...');
+    state.recorder && state.recorder.stop();
+    state.recorder.exportWAV(blob => {
+        callback(blob);
+    });
+    state.recorder.clear();
+}
+
+function onRecorderError(e) {
+  console.error('media error', e);
+}
+
+function onRecorderSuccess(stream, callback, secondsOfAudio) {
+  let audio_context = audio_context || new window.AudioContext;
+  var input = audio_context.createMediaStreamSource(stream);
+  state.recorder = new Recorder(input);
+  state.recorder.record();
+  
+  setTimeout(() => { 
+    StopListening(callback); 
+  }, secondsOfAudio*1000);
+}

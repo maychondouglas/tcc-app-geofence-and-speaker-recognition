@@ -6,30 +6,6 @@ let  recorder;
 let audio_context;
 let id = "";
 
-/*
-function onRecorderSuccess(stream, callback, secondsOfAudio) {
-  audio_context = audio_context || new window.AudioContext;
-  var input = audio_context.createMediaStreamSource(stream);
-  recorder = new Recorder(input);
-  recorder.record();
-  
-  setTimeout(() => { 
-    StopListening(callback); 
-  }, secondsOfAudio*1000);
-}
-
-function onRecorderError(e) {
-  console.error('media error', e);
-}
-
-function StopListening(callback){
-  console.log('...working...');
-    recorder && recorder.stop();
-    recorder.exportWAV(function(blob) {
-        callback(blob);
-    });
-    recorder.clear();
-}*/
 
 const key = "8e962cfc24a445dbbed5cd6b9f922df1";
 const baseApi = "https://westus2.api.cognitive.microsoft.com/";
@@ -70,53 +46,68 @@ export default class Speaker {
   }
 
   createProfile(blob){
-    addAudioPlayer(blob);
+    //addAudioPlayer(blob);
   
-    let request = new XMLHttpRequest();
-    request.open("POST", createIdentificationProfileEndpoint, true);
-  
-    request.setRequestHeader('Content-Type','application/json');
-    request.setRequestHeader('Ocp-Apim-Subscription-Key', key);
-  
-    request.onload = function () {
-      console.log('creating profile');
-      let json = JSON.parse(request.responseText);
-      console.log(json);
-  
-      let profileId = json.profileId;
-  
-      // Now we can enrol this profile using the profileId
-      enrollProfileAudio(blob, profileId);
-    };
-  
-    request.send(JSON.stringify({ 'locale' :'en-us'}));
+    return new Promise((resolve, reject) => {
+        
+      let request = new XMLHttpRequest();
+      request.open("POST", createIdentificationProfileEndpoint, true);
+    
+      request.setRequestHeader('Content-Type','application/json');
+      request.setRequestHeader('Ocp-Apim-Subscription-Key', key);
+    
+      request.onload = function () {
+        console.log('creating profile');
+        let json = JSON.parse(request.responseText);
+        console.log(json);
+    
+        let profileId = json.profileId;
+    
+      
+        resolve(profileId);
+      };
+    
+      request.send(JSON.stringify({ 'locale' :'en-us'}));
+    });
   }
 
   
   // enrollProfileAudio enrolls the recorded audio with the new profile Id, polling the status
   enrollProfileAudio(blob, profileId){
-    
-    let request = new XMLHttpRequest();
-    request.open("POST", enrollIdentificationProfileEndpoint(profileId), true);
-    request.setRequestHeader('Ocp-Apim-Subscription-Key', key);
-    request.onload = function () {
-      console.log('enrolling');
-    
-    if (request.status==200 || request.status==201) {
-      let json = JSON.parse(request.responseText);
-      console.log(json);
 
-      const location = enrollIdentificationProfileStatusEndpoint(profileId);
-      pollForEnrollment(location, profileId);
-    } else {
-      console.log(`Failed to submit for enrollment: got a ${request.status} response code.`);
-      var json = JSON.parse(request.responseText);
-      console.log(`${json.error.code}: ${json.error.message}`);
-    }
-    };  
-    request.send(blob);
+    return new Promise((resolve, reject) => {
+      let request = new XMLHttpRequest();
+      request.open("POST", enrollIdentificationProfileEndpoint(profileId), true);
+      request.setRequestHeader('Ocp-Apim-Subscription-Key', key);
+      request.onload = function () {
+        console.log('enrolling');
+      
+      if (request.status==200 || request.status==201) {
+        let json = JSON.parse(request.responseText);
+        console.log(json);
+  
+        //const location = enrollIdentificationProfileStatusEndpoint(profileId);
+        //resolve(pollForEnrollment(location, profileId));
+        resolve(profileId);
+
+
+      } else {
+        console.log(`Failed to submit for enrollment: got a ${request.status} response code.`);
+        var json = JSON.parse(request.responseText);
+        console.log(`${json.error.code}: ${json.error.message}`);
+
+        reject(`${json.error.code}: ${json.error.message}`);
+
+
+
+      }
+      };  
+      request.send(blob);
+    });
+  
   }
 
+  //tirei essa parte para ver como vai se comportar
   // Ping the status endpoint to see if the enrollment for identification has completed
   pollForEnrollment(location, profileId){
     var enrolledInterval;
