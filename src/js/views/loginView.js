@@ -36,6 +36,16 @@ export const renderLoading = login => {
             </div>
             <button class='btn btn-return'>Return</button>
           </div>
+
+          <div class='subscribe-record hidden'>
+            <div class='login-record__verify'>
+              <div id='voice-subscribe-button' class='login-record__subscribe__icon'>
+                <img src='../../images/icons/mic.svg'>
+              </div>
+              <p class='record-msg'>Clique no microfone para iniciar o cadastro de voz</p>
+            </div>
+            <button class='btn btn-return'>Return</button>
+          </div>
         <div>
       </div>
     </main>
@@ -101,3 +111,25 @@ export const getDataNewUser = () => {
   };
 }
 
+export const renderAudioRecordToSubscribe = () => {
+
+  const signup_area = document.querySelector('.sign-up-area');
+  const signup_voice_record_area = document.querySelector('.subscribe-record');
+
+  signup_area.classList.add('hidden');
+  signup_voice_record_area.classList.remove('hidden');
+}
+
+export const renderAudioRecordingToSubscribe = () => {
+  const record_msg = document.querySelector('.record-msg');
+
+  const record__subscribe__icon = document.querySelector('.login-record__subscribe__icon');
+
+  record_msg.innerHTML = `Fale alguma frase legal ou desabafe por 15 segundos`;
+  record__subscribe__icon.querySelector('img').setAttribute('src', '../../images/icons/waves.svg');
+  record__subscribe__icon.classList.add('record-init');
+}
+
+export const deleteLoginView = () => {
+  elements.body.innerHTML = '';
+}

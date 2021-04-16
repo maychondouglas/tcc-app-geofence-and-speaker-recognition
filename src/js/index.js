@@ -168,13 +168,21 @@ const inicializarApp = () => {
 const iniciarMapa = () => {
 
 
+
   /*                      PRIMEIRO MODAL                     */
   /*                      PRIMEIRO MODAL                     */
   /*                      PRIMEIRO MODAL                     */
   /*                      PRIMEIRO MODAL                     */
   /*                      PRIMEIRO MODAL                     */
 
-  inicializarDB();
+  if(! state.database){
+    inicializarDB();
+  }
+
+  document.body.innerHTML = `<div id="map"></div>
+  <main>
+    <div class="buttons-controll-fence"></div>
+  </main>`;
 
   modalController({
     modalId: 'modalInit',
@@ -283,7 +291,7 @@ elements.body.addEventListener('click', e => {
     
     const fenceRepository = new FenceRepository(state.database);
 
-    let envio = fenceRepository.create('maychondouglas', state.fence);
+    let envio = fenceRepository.create(state.username, state.fence);
 
     //iniciar loading
     loadingController({ loadingId: 'awaitingFenceSubscribe' });
@@ -348,6 +356,7 @@ elements.body.addEventListener('click', e => {
         userRepository.create(userData).then(res => {
           LoadingView.hideLoading('initialLoading');
           LoginView.renderAudioRecordToSubscribe();
+          state.username = userData.username;
         })
       }else{
         LoadingView.hideLoading('initialLoading');
@@ -366,7 +375,7 @@ elements.body.addEventListener('click', e => {
     LoginView.renderSignUpData();
 
   }else if(e.target.matches('.login-record__subscribe__icon, .login-record__subscribe__icon *')){
-    startRecordToSubscribe();
+    recordToSubscribe();
   }
 
 });
@@ -404,9 +413,24 @@ const initSpeakerRecognition = (speakerId) => {
 
 window.onload = inicializarApp;
 
+const sendIdToDB = (speaker) => {
+
+  try{
+
+    if(!state.database){
+      inicializarDB();
+    }
+  
+    const speakerRepository = new SpeakerRepository(state.database);
+  
+    return speakerRepository.create(state.username, speaker);
 
 
+  }catch(err){
+    console.log(err);
+  }
 
+}
 
 
 
@@ -421,11 +445,12 @@ const createBlob = (seconds) => {
 
 
 /*Criando o Áudio( blob ) para um novo Usuário*/
-const startRecordToSubscribe = () => {
+const recordToSubscribe = () => {
   console.log('Gravação para Cadastro de Novo Locutor Iniciada...');
 
   const speaker = new Speaker();
 
+  LoginView.renderAudioRecordingToSubscribe();
   createBlob(15);
 
   setTimeout(() => {
@@ -433,13 +458,26 @@ const startRecordToSubscribe = () => {
 
     resultado.then(res1 => {
       //irá devolver o ID do novo Locutor, esse ID será enviado para o cadastro do usuário no Firebase
-      //console.log(res);
+
+
+      LoadingView.showLoading('initialLoading');
 
       speaker.enrollProfileAudio(state.audioBlob, res1).then(res2 => {
-        console.log(res2);
+        console.log();
 
+        speaker.id = res2;
+
+        /*Cadastrar o ID de Locutor do usuário */
+        
+        LoadingView.hideLoading('initialLoading');
+
+        sendIdToDB(speaker).then(res3 => {
+          LoginView.deleteLoginView();
+          //redicionar para cadastro de cerca
+          iniciarMapa();
+        });
+        
       }).catch(err => {
-
         console.log(err);
 
       })
