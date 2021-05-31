@@ -1,3 +1,9 @@
+/*
+  Descrição: Classe de Modelo de Botões
+  Autor: Maychon Douglas // @maychondouglas
+  Data: 2021/1
+*/
+
 export default class Button {
   constructor(button){
     this.id = button.id;

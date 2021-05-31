@@ -36,6 +36,8 @@
     "azure-maps-control": "^2.0.31",
     "azure-maps-drawing-tools": "^0.1.6",
     "file-loader": "^6.0.0",
-    "firebase": "^8.2.9"
+    "firebase": "^8.2.9",
+    "webpack-pwa-manifest": "^4.3.0",
+    "workbox-webpack-plugin": "^6.1.5"
   }
 }

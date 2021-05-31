@@ -1,3 +1,8 @@
+/*
+  Descrição: Classe de Modelo de Modal
+  Autor: Maychon Douglas // @maychondouglas
+  Data: 2021/1
+*/
 
 
 export default class Modal {

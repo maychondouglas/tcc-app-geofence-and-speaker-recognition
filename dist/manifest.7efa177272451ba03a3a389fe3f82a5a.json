@@ -1,0 +1,48 @@
+{
+  "icons": [
+    {
+      "src": "icon_512x512.1eb2418552f44bfa56d97124f872d0bd.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icon_256x256.7e53c0d660a85c2f0f5ed448ff714aa0.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icon_192x192.f9e8ddb3635f2cfb5d8be073b4223348.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icon_180x180.f66ad73936836a80f9080715122bf7c6.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icon_128x128.4043b9b118f9c691bd9a76234d22dd45.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icon_96x96.b065568a822c4bd5f13c02a519e445f6.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "name": "Speaker and Geofencing",
+  "short_name": "GeoLocutor",
+  "orientation": "portrait-primary",
+  "display": "standalone",
+  "start_url": "/",
+  "description": "Reconhecimento de Locutor com Uso de Georreferenciamento",
+  "background_color": "#D4F3EF",
+  "theme_color": "#AFE0E5"
+}

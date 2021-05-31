@@ -1,3 +1,10 @@
+
+/*
+  Descrição: Loading View
+  Autor: Maychon Douglas // @maychondouglas
+  Data: 2021/1
+*/
+
 import { elements } from "./base";
 
 export const renderLoading = loading => {

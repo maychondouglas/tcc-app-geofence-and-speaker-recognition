@@ -1,3 +1,8 @@
+/*
+  Descrição: Modal View
+  Autor: Maychon Douglas // @maychondouglas
+  Data: 2021/1
+*/
 import { elements } from './base.js';
 
 export const rederTheModal = (modal) =>  {

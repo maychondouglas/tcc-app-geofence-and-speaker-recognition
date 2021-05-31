@@ -1,3 +1,8 @@
+/*
+  Descrição: Login View
+  Autor: Maychon Douglas // @maychondouglas
+  Data: 2021/1
+*/
 import { elements } from './base.js';
 
 export const renderLoading = login => {
@@ -30,9 +35,9 @@ export const renderLoading = login => {
           <div class='login-record hidden'>
             <div class='login-record__verify'>
               <div class='login-record__verify__icon'>
-                <img src='../../images/icons/mic.svg'>
+                <img src='images/icons/mic.svg'>
               </div>
-              <p class='record-msg'>Clique no microfone para iniciar o reconhecimento</p>
+              <p class='record-msg'>Clique no microfone para começar o reconhecimento</p>
             </div>
             <button class='btn btn-return'>Return</button>
           </div>
@@ -40,9 +45,9 @@ export const renderLoading = login => {
           <div class='subscribe-record hidden'>
             <div class='login-record__verify'>
               <div id='voice-subscribe-button' class='login-record__subscribe__icon'>
-                <img src='../../images/icons/mic.svg'>
+                <img src='images/icons/mic.svg'>
               </div>
-              <p class='record-msg'>Clique no microfone para iniciar o cadastro de voz</p>
+              <p class='record-msg'>Clique no microfone para começar o reconhecimento</p>
             </div>
             <button class='btn btn-return'>Return</button>
           </div>
@@ -61,7 +66,7 @@ export const renderAudioRecord = () => {
   const login_area = document.querySelector('.login-area>div');
 
   record_section.classList.remove('hidden');
-  record__verify__icon.querySelector('img').setAttribute('src', '../../images/icons/mic.svg');
+  record__verify__icon.querySelector('img').setAttribute('src', 'images/icons/mic.svg');
   //record__verify__icon.classList.add('record-init');
   login_area.classList.add('hidden');
 }
@@ -72,7 +77,7 @@ export const renderAudioRecording = () => {
   const record__verify__icon = document.querySelector('.login-record__verify__icon');
 
   record_msg.innerHTML = `Fale alguma frase legal ou desabafe por 10 segundos`;
-  record__verify__icon.querySelector('img').setAttribute('src', '../../images/icons/waves.svg');
+  record__verify__icon.querySelector('img').setAttribute('src', 'images/icons/waves.svg');
   record__verify__icon.classList.add('record-init');
 }
 
@@ -83,20 +88,22 @@ export const renderAudioRecordCompleted = (firstName, accessResult) => {
     const record__verify__icon = document.querySelector('.login-record__verify__icon');
   
     record_msg.innerHTML = `Pronto! Você é o ${firstName} mesmo ;)`;
-    record__verify__icon.querySelector('img').setAttribute('src', '../../images/icons/check.svg');
+    record__verify__icon.querySelector('img').setAttribute('src', 'images/icons/check.svg');
     record__verify__icon.classList.add('record-authorized');
   }else{
     const record_msg = document.querySelector('.record-msg');
     const record__verify__icon = document.querySelector('.login-record__verify__icon');
   
     record_msg.innerHTML = `Não conseguimos validar. É você mesmo? Tente novamente... ;)`;
-    record__verify__icon.querySelector('img').setAttribute('src', '../../images/icons/close.svg');
+    record__verify__icon.querySelector('img').setAttribute('src', 'images/icons/close.svg');
     record__verify__icon.classList.add('record-denied');
   }
 
 }
 
 export const renderSignUpData = () => {
+  const record__verify__icon = document.querySelector('.login-record__verify__icon');
+  record__verify__icon.classList.remove('record-denied');
   const login_area = document.querySelector('.login-area>div');
   const sign_up_area = document.querySelector('.sign-up-area');
   login_area.classList.add('hidden');
@@ -126,7 +133,7 @@ export const renderAudioRecordingToSubscribe = () => {
   const record__subscribe__icon = document.querySelector('.login-record__subscribe__icon');
 
   record_msg.innerHTML = `Fale alguma frase legal ou desabafe por 15 segundos`;
-  record__subscribe__icon.querySelector('img').setAttribute('src', '../../images/icons/waves.svg');
+  record__subscribe__icon.querySelector('img').setAttribute('src', 'images/icons/waves.svg');
   record__subscribe__icon.classList.add('record-init');
 }
 

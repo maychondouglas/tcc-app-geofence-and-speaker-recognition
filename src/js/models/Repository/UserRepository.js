@@ -1,3 +1,8 @@
+/*
+  Descrição: Classe de Armazenamento do Usuário
+  Autor: Maychon Douglas // @maychondouglas
+  Data: 2021/1
+*/
 export default class UserRepository {
   constructor(database){
     this.database = database;
@@ -22,7 +27,7 @@ export default class UserRepository {
   read(user){
     return new Promise((resolve, reject) => {
 
-      let result = this.database.recev(`usuarios/`, user.username);
+      let result = this.database.receive(`usuarios/`, user.username);
 
       if(result){
         resolve(result);

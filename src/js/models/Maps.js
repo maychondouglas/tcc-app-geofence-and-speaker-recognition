@@ -1,3 +1,9 @@
+/*
+  Descrição: Classe de Modelo de Mapa
+  Autor: Maychon Douglas // @maychondouglas
+  Data: 2021/1
+*/
+
 import * as atlas from 'azure-maps-control';
 import * as atlasDraw from 'azure-maps-drawing-tools';
 import Fence from './Fence';
@@ -25,26 +31,39 @@ export default class Maps {
     this.markerOptions.popup =  new atlas.Popup(configs.popupMarkerOptions);
 
     this.marker = new atlas.HtmlMarker(this.markerOptions);
+    //this.map.markers = new atlas.HtmlMarker(this.markerOptions);
+
+    //this.markerManager = new atlas.HtmlMarkerManager;
 
     this.map.events.add('click', this.marker, () => {
       this.marker.togglePopup();
     });
 
-    this.map.markers.add(this.marker);
+    
 
     this.fenceSubscribeButton = document.querySelector('#fence-subscribe');
 
+
+
+
+    //this.map.events.add('ready', () => {
+      this.map.markers.add(this.marker);
+    //});
   }
 
   buildToolbar(){
+    /*
+      Executa a criação da barra de ferramentas de desenho
+    */
     this.map.events.add('ready', () => {
       drawingManager = new atlasDraw.drawing.DrawingManager(this.map, {
           toolbar: new atlasDraw.control.DrawingToolbar({ 
             position: 'non-fixed', 
             style: 'dark', 
-            buttons: ['draw-circle', 'draw-rectangle']  
+            buttons: ['draw-circle']  
           })
       });
+      
 
       this.map.events.add('drawingmodechanged', drawingManager, mode => {
 
@@ -134,6 +153,22 @@ export default class Maps {
       }));
 
     });
+  }
+
+  setMarkerPosition(longitude, latitude){
+
+    console.log('****ALTERANDO A LOCALIZAÇÃO DO USUÁRIO*****');
+
+    this.markerOptions = {
+      htmlContent: '<div><div class="pin bounce"></div><div class="pulse"></div></div>',
+      color: 'DodgerBlue',
+      text: 'o',
+      position: [longitude, latitude]
+    };
+
+    this.map.markers.clear();
+    this.map.markers.add(new atlas.HtmlMarker(this.markerOptions));
+
   }
 
 };

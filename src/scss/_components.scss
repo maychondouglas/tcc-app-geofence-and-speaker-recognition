@@ -68,6 +68,22 @@
     }
   }
 
+  &-acionar-tranca{
+    background-color: #029DF0;
+    color: #fff;
+    position: fixed;
+    z-index: 10000;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    bottom: 1rem;
+  
+    &:disabled{
+      background: var(--color-grey-light-4);
+      color: var(--color-primary-dark);
+    }
+  }
+
   &-secondary{
     border: solid 2px var(--color-primary-dark);
     color: var(--color-primary-dark);

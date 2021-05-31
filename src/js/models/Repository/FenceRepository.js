@@ -1,3 +1,8 @@
+/*
+  Descrição: Classe de Armazenamento da Cerca
+  Autor: Maychon Douglas // @maychondouglas
+  Data: 2021/1
+*/
 import Fence from "../Fence";
 
 export default class FenceRepository {
@@ -30,7 +35,7 @@ export default class FenceRepository {
   async read(user){
     return new Promise((resolve, reject) => {
 
-      let result = this.database.recev(`usuarios/${user.username}`, 'fence');
+      let result = this.database.receive(`usuarios/${user.username}`, 'fence');
 
       if(result){
 

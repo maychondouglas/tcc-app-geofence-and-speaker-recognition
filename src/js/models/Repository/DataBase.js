@@ -1,3 +1,9 @@
+/*
+  Descrição: Classe de Banco de Dados
+  Autor: Maychon Douglas // @maychondouglas
+  Data: 2021/1
+*/
+
 export default class DataBase {
 
   constructor(data){
@@ -15,7 +21,7 @@ export default class DataBase {
     });
   }
 
-  async recev(where, who){
+  async receive(where, who){
 
     return await this.database.ref(where).child(who).get().then( result =>  {
       if (result.exists()) {
@@ -30,3 +36,4 @@ export default class DataBase {
     });
   }
 }
+

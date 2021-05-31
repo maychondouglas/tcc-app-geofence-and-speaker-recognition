@@ -1,19 +1,17 @@
 /*
-  Descrição: Classe de Armazenamento do ID do Locutor
+  Descrição: Classe de Armazenamento do Estado da Tranca
   Autor: Maychon Douglas // @maychondouglas
   Data: 2021/1
 */
-export default class SpeakerRepository {
+export default class LockedRepository {
   constructor(database){
     this.database = database;
   }
 
-  create(user, speaker){
+  set(user, locked){
 
     return new Promise((resolve, reject) => {
-      let result = this.database.send(`usuarios/${user}/speaker/`, {
-        id: (speaker.id)?speaker.id:""
-      });
+      let result = this.database.send(`usuarios/${user}/locked`, locked);
 
       if(result){
         resolve('ok');
@@ -26,7 +24,7 @@ export default class SpeakerRepository {
   read(user){
     return new Promise((resolve, reject) => {
 
-      let result = this.database.receive(`usuarios/${user.username}`, 'speaker');
+      let result = this.database.receive(`usuarios/${user.username}`, 'locked');
 
       if(result){
         resolve(result);
