@@ -458,7 +458,8 @@ elements.body.addEventListener('click', e => {
       console.log(deuCerto);
       setTimeout(() => {
         LoadingView.hideLoading('awaitingFenceSubscribe');
-      }, 1000 )
+        window.location.href = "/"
+      }, 2000 )
     }).catch(err => {
       console.log(err);
     })
@@ -714,6 +715,7 @@ const initValidation = () => {
 
 //Inicializa a Aplicação
 const inicializarApp = () => {
+  
 
   inicializarDB();
 
