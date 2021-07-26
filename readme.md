@@ -14,10 +14,9 @@ O acionamento de dispositivos (localizados na residência do usuário) pode ser 
 
 A Aplicação Web foi desenvolvida em Javascript no formato de PWA (Progressive Web Application), podendo ser instalado em múltiplas plataformas (Android, iOS, Windows etc.)
 
-## Execução
-No gif abaixo é mostrado o processo de cadastro e autenticação na aplicação, seguidos do acionamento da tranca, no microcontrolador conectado a Internet (localizado na residência do usuário):
-
-![image](https://drive.google.com/uc?export=view&id=1fA6FjqCZeKfbvPcUNORcDDX_ehUqi-kG.gif)
+## Cadastro de um novo Usuário
+### Cadastro da Voz do Locutor
+![image](/assets/cadastro-voz.gif)
 
 ## Etapas de Autenticação
 O diagrama abaixo ilustra as etapas do processo de autenticação:
