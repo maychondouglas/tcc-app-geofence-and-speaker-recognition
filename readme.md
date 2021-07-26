@@ -18,6 +18,17 @@ A Aplicação Web foi desenvolvida em Javascript no formato de PWA (Progressive 
 ### Cadastro da Voz do Locutor
 ![image](/assets/cadastro-voz.gif)
 
+### Cadastro da Cerca Virtual
+![image](/assets/cadastro-da-cerca.gif)
+
+## Autenticação do Usuário
+### Verificação por Reconhecimento de Locutor
+![image](/assets/verificacao-da-voz.gif)
+
+### Verificação por Geofencing
+![image](/assets/verificacao-da-cerca.gif)
+
+
 ## Etapas de Autenticação
 O diagrama abaixo ilustra as etapas do processo de autenticação:
 
