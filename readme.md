@@ -21,7 +21,7 @@ No gif abaixo é mostrado o processo de cadastro e autenticação na aplicação
 
 ## Etapas de Autenticação
 O diagrama abaixo ilustra as etapas do processo de autenticação:
-![](/assets/auth-steps.gif)
+![](/assets/auth-steps.png)
 
 ### Etapa 1
 Na primeira etapa a App, depois de obter o username (nome de usuário) que será digitado pelo usuário, irá verificar se existe algum usuário cadastrado com este identificador.
