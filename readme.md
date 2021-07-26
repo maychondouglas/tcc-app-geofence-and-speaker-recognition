@@ -27,3 +27,14 @@ O diagrama abaixo ilustra as etapas do processo de autenticação:
 Na primeira etapa a App, depois de obter o username (nome de usuário) que será digitado pelo usuário, irá verificar se existe algum usuário cadastrado com este identificador.
 
 ### Etapa 2
+Se existir usuário cadastrado com o username informado, a aplicação fará a gravação de voz do usuário por aproximadamente 10 segundos. Esta gravação será encaminhada à API de Reconhecimento de Locutor, juntamente com o ID de Locutor previamente cadastrado, para comparar as características da voz obtida na gravação atual com as características obtidas anteriormente em fase de cadastro. A reposta da API de Reconhecimento de Locutor será um percentual de aproximação que está no intervalo de 0,0 a 100,0. Quanto menor o percentual, menos provável de ser a voz autêntica do usuário.
+
+### Etapa 3
+Se o percentual de aproximação da gravação da voz do usuário for maior ou igual a 60,0, a Aplicação irá então solicitar os dados referentes a cerca virtual cadastradas ao banco de dados Firebase.
+
+### Etapa 4
+A aplicação vai utilizar a API de Geofencing para mostrar ao usuário sua posição atual juntamente com a cerca virtual cadastrada.
+
+### Etapa 5
+Após a validação da voz e de localização do usuário, ele já poderá fazer o acionamento da tranca, que está localizada na sua residência, através de um microcontrolador com acesso ao banco de dados Firebase, que faz a leitura de uma variável (flag) que armazena o estado da tranca.
+
