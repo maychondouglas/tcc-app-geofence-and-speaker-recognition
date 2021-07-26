@@ -17,7 +17,7 @@ A Aplicação Web foi desenvolvida em Javascript no formato de PWA (Progressive 
 ## Execução
 No gif abaixo é mostrado o processo de cadastro e autenticação na aplicação, seguidos do acionamento da tranca, no microcontrolador conectado a Internet (localizado na residência do usuário):
 
-![](/assets/execution.gif)
+![](https://drive.google.com/file/d/1fA6FjqCZeKfbvPcUNORcDDX_ehUqi-kG/view)
 
 ## Etapas de Autenticação
 O diagrama abaixo ilustra as etapas do processo de autenticação:
