@@ -21,6 +21,7 @@ No gif abaixo é mostrado o processo de cadastro e autenticação na aplicação
 
 ## Etapas de Autenticação
 O diagrama abaixo ilustra as etapas do processo de autenticação:
+
 ![](/assets/auth-steps.png)
 
 ### Etapa 1
