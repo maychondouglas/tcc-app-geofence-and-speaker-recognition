@@ -1,3 +1,10 @@
+/**
+ * Descrição: Código em Execução no Módulo do ESP32
+ * Autor: Maychon Douglas // @maychondouglas
+ * Data: 2021/1
+ */
+
+
 //Importando as bibliotecas que serão utilizadas
 #include <WiFi.h>
 #include <FirebaseESP32.h>

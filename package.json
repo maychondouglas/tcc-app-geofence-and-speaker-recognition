@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Trabalho de Conclusão de Curso II",
   "main": "index.js",
+  
   "scripts": {
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
