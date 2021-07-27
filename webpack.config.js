@@ -1,3 +1,9 @@
+/**
+ * Descrição: Configurações do WebPack
+ * Autor: Maychon Douglas // @maychondouglas
+ * Data: 2021/1
+ */
+
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
